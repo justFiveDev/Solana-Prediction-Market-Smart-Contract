@@ -1,113 +1,123 @@
-# takesfun fork program
+# Solana Prediction Market Smart Contract
 
-## Setup
+A **prediction market** smart contract on Solana. Create and trade YES/NO outcome tokens, then migrate completed markets to Raydium. Built with Anchor for the **Solana prediction market** ecosystem.
 
-Only needed once per chain
+## What is this?
 
-## Deployment
+This repo provides an on-chain **prediction market smart contract** that runs on Solana. Market creators launch binary (YES/NO) markets; traders swap SOL for outcome tokens and back. When a market completes, liquidity can be migrated to Raydium. Use it as a foundation for a **Solana prediction market** app or integrate the program into your own frontend.
 
-Program is deployed
+## Features
 
-## Config
+- **Create prediction markets** with YES and NO outcome tokens
+- **Swap** SOL ↔ YES/NO tokens (buy and sell) on a bonding curve
+- **Creator claims** and fee distribution
+- **Migrate** completed markets to Raydium
+- **Admin config** for fees and launch parameters
 
-Call the `configure` instruction to set the config for the program +
-Sets the fee amounts and allowed launch parameters.
+## Prerequisites
 
-## Prerequites
+Install Rust, Solana, and Anchor (AVM): https://solana.com/docs/intro/installation
 
-Install Rust, Solana, and AVM: https://solana.com/docs/intro/installation
+Use **Anchor v0.30.1**:
 
-Remember to install anchor v0.30.1.
+```bash
+avm install 0.30.1
+avm use 0.30.1
+```
 
 ## Quick Start
 
 ### Build the program
 
 ```bash
-# build the program
 anchor run build
+```
 
-# For those who use a different CARGO_TARGET_DIR location (like me I used ${userHome}/.cargo/target)
-# then you'll need to move the <program-name>.so back to $PWD/target/deploy/<program-name.so>.
+If you use a custom `CARGO_TARGET_DIR` (e.g. `$HOME/.cargo/target`), link the built program into the deploy folder:
 
-# E.g:
+```bash
 ln -s $HOME/.cargo/target/sbf-solana-solana/release/takesfun.so $PWD/target/deploy/takesfun.so
 ```
 
 ### Run tests
 
-you can run the tests without having to start a local network:
+Run tests without a local network:
 
 ```bash
 anchor test --provider.cluster Localnet
 ```
 
-### Start a local network and run tests
+### Local network and deployment
 
-Run a local Solana validator network:
+Configure for localhost and start a validator:
 
 ```bash
-solana config set -ul    # For localhost
+solana config set -ul
+solana config set -k ./keys/EgBcC7KVQTh1QeU3qxCFsnwZKYMMQkv6TzgEDkKvSNLv.json
 
-solana config set -k ./keys/EgBcC7KVQTh1QeU3qxCFsnwZKYMMQkv6TzgEDkKvSNLv.json # use the test keypair for simplicity
-
-# start a localhost testnet completely fresh
-# --bpf-program is for init programs at genesis. We need metadata program.
-# another way is to use --clone using --url as reference. Ref: https://www.anchor-lang.com/docs/manifest#test-validator
+# Start validator with metadata program for tokens
 solana-test-validator -r --bpf-program metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s spl-programs/metadata.so
 ```
 
-Deploy the program:
+Deploy the prediction market program:
 
 ```bash
 anchor deploy --provider.cluster Localnet
 ```
 
-Run some tests:
+Run tests against localnet:
 
 ```bash
-# run all tests
 anchor run test --provider.cluster Localnet
-
-# run a single test (e.g. a test with "correctly configured" as name)
 anchor run test --provider.cluster Localnet -- "'correctly configured'"
 ```
 
-### Test program on devnet
+### Devnet
 
-Set the cluster as devnet in `Anchor.toml`:
-```bash
-[provider]
-cluster = "<DEVNET_RPC>"
-```
+Set the cluster in `Anchor.toml` to your devnet RPC, then:
 
-Deploy program:
 ```bash
 anchor deploy
 ```
 
-#### Use CLI to test the program
+## Configuration
 
-Initialize program:
+Call the `configure` instruction (admin only) to set global config: fee amounts and allowed launch parameters for the prediction market smart contract.
+
+## CLI: Test the prediction market
+
+### Initialize program config
+
 ```bash
 yarn script config
 ```
 
-Launch a token:
+### Launch a prediction market (create YES/NO market)
+
 ```bash
 yarn script launch
 ```
 
-Swap SOL for token:
+### Swap SOL for outcome tokens
+
 ```bash
 yarn script swap -t <TOKEN_MINT> -a <SWAP_AMOUNT> -s <SWAP_DIRECTION>
 ```
-`TOKEN_MINT`: You can get token mint when you launch a token
-`SWAP_AMOUNT`: SOL/Token amount to swap
-`SWAP_DIRECTION`: 0 - Buy token, 1 - Sell token
 
-Migrate token to raydium once the curve is completed:
+- `TOKEN_MINT`: YES or NO token mint (from launch output)
+- `SWAP_AMOUNT`: Amount in SOL or tokens to swap
+- `SWAP_DIRECTION`: `0` = Buy, `1` = Sell
+
+### Migrate to Raydium
+
+After the curve is completed, migrate the market to Raydium:
+
 ```bash
 yarn script migrate -t <TOKEN_MINT>
 ```
-`TOKEN_MINT`: mint address of the token to be launched on the raydium
+
+`TOKEN_MINT`: mint address of the market token to migrate.
+
+---
+
+**Keywords:** prediction market, prediction market smart contract, Solana prediction market, binary outcome market, YES NO tokens, Solana Anchor.
