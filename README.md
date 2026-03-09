@@ -120,4 +120,8 @@ yarn script migrate -t <TOKEN_MINT>
 
 ---
 
+## Author
+
+[Telegram](https://t.me/microRustyme)
+
 **Keywords:** prediction market, prediction market smart contract, Solana prediction market, binary outcome market, YES NO tokens, Solana Anchor.
