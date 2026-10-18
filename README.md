@@ -23,7 +23,7 @@ Open-source **Solana prediction market** program built with **Anchor**. Launch b
 - [Raydium / OpenBook Helpers](#raydium--openbook-helpers)
 - [Program ID](#program-id)
 - [Security Notice](#security-notice)
-- [Author](#author)
+- [Contact](#contact)
 - [Keywords](#keywords)
 
 ---
@@ -389,9 +389,9 @@ This code is provided as a **reference implementation** and development starter.
 
 ---
 
-## Author
+## Contact
 
-[Telegram](https://t.me/microRustyme)
+fiv3fingers.dev@gmail.com
 
 ---
 
